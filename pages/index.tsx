@@ -54,7 +54,9 @@ export default function Home() {
 
         try {
             const response = await axios.post<SummarizationResponse>("/api/summarize", { transcript });
-            setSummary(response.data.summary);
+
+            const formattedSummary = response.data.summary.replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>");
+            setSummary(formattedSummary);
         } catch (error: any) {
             alert("Failed to summarize transcript: " + error.message);
             console.error(error);
@@ -94,7 +96,7 @@ export default function Home() {
             {summary && (
                 <>
                     <h3>Summary:</h3>
-                    <p style={{ background: "#e8f5e9", padding: "10px", borderRadius: "5px" }}>{summary}</p>
+                    <div dangerouslySetInnerHTML={{ __html: summary }} style={{ background: "#e8f5e9", padding: "10px", borderRadius: "5px" }} />
                 </>
             )}
         </div>

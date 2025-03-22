@@ -23,18 +23,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ error: "Missing transcript" });
     }
 
-    const estimateTokenCount = (text: string): number => {
-        return Math.ceil(text.length / 4); // Approx 1 token per 4 chars
-    };
-
     try {
         console.log("Summarizing Transcript...");
         console.log("Transcript Input:", transcript.slice(0, 100) + "...");
 
         // Dynamically set max_tokens
-        //const maxTokens = estimateMaxTokens(transcript, 4096);
-        const estimatedTokens = estimateTokenCount(transcript);
-        const maxTokens = Math.min(Math.max(estimatedTokens / 2, 200), 4000);
+        const maxTokens = estimateMaxTokens(transcript, 4096);
 
         // const response = await openai.chat.completions.create({
         //     model: "gpt-4-turbo",
